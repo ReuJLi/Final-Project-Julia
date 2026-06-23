@@ -1,58 +1,77 @@
 # Simple Calculator + Stats Calculator in Julia
 # Phase 1 Source: https://github.com/logankilpatrick/Julia-Projects-for-Beginners/blob/main/calculator.jl
-# Phase 2: Extended with statistics features using AI assistance
+# Phase 2: Extended with statistics features and formatted output using AI assistance
+
+# Color codes
+const RESET = "\033[0m"
+const BOLD = "\033[1m"
+const CYAN = "\033[36m"
+const GREEN = "\033[32m"
+const YELLOW = "\033[33m"
+const RED = "\033[31m"
+const MAGENTA = "\033[35m"
+
+function print_header()
+    println(CYAN * BOLD * "╔══════════════════════════════════════════╗" * RESET)
+    println(CYAN * BOLD * "║   Julia Calculator & Stats App  📊        ║" * RESET)
+    println(CYAN * BOLD * "╚══════════════════════════════════════════╝" * RESET)
+end
+
+function print_menu()
+    println(YELLOW * BOLD * "\n====== MENU ======" * RESET)
+    println(GREEN * "  1. Addition       +" * RESET)
+    println(GREEN * "  2. Subtraction    -" * RESET)
+    println(GREEN * "  3. Multiplication *" * RESET)
+    println(GREEN * "  4. Division       /" * RESET)
+    println(MAGENTA * "  5. Statistics Calculator 📈" * RESET)
+    println(RED * "  6. Exit" * RESET)
+    println(YELLOW * BOLD * "==================" * RESET)
+    print(BOLD * "Enter choice: " * RESET)
+end
+
+function get_two_numbers()
+    print(BOLD * "Enter first number: " * RESET)
+    num1 = parse(Float64, readline())
+    print(BOLD * "Enter second number: " * RESET)
+    num2 = parse(Float64, readline())
+    return num1, num2
+end
+
+function print_result(result)
+    println(GREEN * BOLD * "\n  ✓ Output: $result" * RESET)
+end
 
 function calculator()
-    println("----Welcome to the Calculator & Stats App written in Julia----")
+    print_header()
     while true
-        # Print calculator app menu
-        println("====Menu====")
-        println("1. Addition +")
-        println("2. Subtraction -")
-        println("3. Multiplication *")
-        println("4. Division /")
-        println("5. Statistics Calculator")
-        println("6. Exit")
+        print_menu()
         operation = parse(Int64, readline())
 
         if operation == 1
-            println("Enter first number: ")
-            num1 = parse(Float64, readline())
-            println("Enter second number: ")
-            num2 = parse(Float64, readline())
-            println("Output: $(num1 + num2)")
+            num1, num2 = get_two_numbers()
+            print_result(num1 + num2)
         elseif operation == 2
-            println("Enter first number: ")
-            num1 = parse(Float64, readline())
-            println("Enter second number: ")
-            num2 = parse(Float64, readline())
-            println("Output: $(num1 - num2)")
+            num1, num2 = get_two_numbers()
+            print_result(num1 - num2)
         elseif operation == 3
-            println("Enter first number: ")
-            num1 = parse(Float64, readline())
-            println("Enter second number: ")
-            num2 = parse(Float64, readline())
-            println("Output: $(num1 * num2)")
+            num1, num2 = get_two_numbers()
+            print_result(num1 * num2)
         elseif operation == 4
-            println("Enter first number: ")
-            num1 = parse(Float64, readline())
-            println("Enter second number: ")
-            num2 = parse(Float64, readline())
+            num1, num2 = get_two_numbers()
             if num2 == 0
-                println("Error: Cannot divide by zero!")
+                println(RED * "\n  ✗ Error: Cannot divide by zero!" * RESET)
             else
-                println("Output: $(num1 / num2)")
+                print_result(num1 / num2)
             end
         elseif operation == 5
-            println("Enter how many numbers you want to analyze: ")
+            print(BOLD * "\nHow many numbers to analyze? " * RESET)
             n = parse(Int64, readline())
             numbers = Float64[]
             for i in 1:n
-                println("Enter number $i: ")
+                print(BOLD * "  Enter number $i: " * RESET)
                 push!(numbers, parse(Float64, readline()))
             end
 
-            # Calculate statistics
             mean_val = sum(numbers) / length(numbers)
             sorted = sort(numbers)
             n_len = length(sorted)
@@ -63,19 +82,22 @@ function calculator()
             end
             std_val = sqrt(sum((x - mean_val)^2 for x in numbers) / length(numbers))
 
-            println("\n====Statistics Results====")
-            println("Numbers: $numbers")
-            println("Mean: $mean_val")
-            println("Median: $median_val")
-            println("Std Deviation: $std_val")
-            println("Min: $(minimum(numbers))")
-            println("Max: $(maximum(numbers))")
-            println("Range: $(maximum(numbers) - minimum(numbers))")
+            println(MAGENTA * BOLD * "\n╔══════════════════════════════════════════╗" * RESET)
+            println(MAGENTA * BOLD * "║         Statistics Results 📊             ║" * RESET)
+            println(MAGENTA * BOLD * "╠══════════════════════════════════════════╣" * RESET)
+            println(MAGENTA * "║  Numbers:    $numbers" * RESET)
+            println(MAGENTA * "║  Mean:       $mean_val" * RESET)
+            println(MAGENTA * "║  Median:     $median_val" * RESET)
+            println(MAGENTA * "║  Std Dev:    $std_val" * RESET)
+            println(MAGENTA * "║  Min:        $(minimum(numbers))" * RESET)
+            println(MAGENTA * "║  Max:        $(maximum(numbers))" * RESET)
+            println(MAGENTA * "║  Range:      $(maximum(numbers) - minimum(numbers))" * RESET)
+            println(MAGENTA * BOLD * "╚══════════════════════════════════════════╝" * RESET)
         elseif operation == 6
-            println("Exiting the calculator app.")
+            println(RED * BOLD * "\n  Exiting the calculator app. Goodbye! 👋" * RESET)
             break
         else
-            println("Invalid input. Please try again.")
+            println(RED * "\n  ✗ Invalid input. Please try again." * RESET)
         end
     end
 end
